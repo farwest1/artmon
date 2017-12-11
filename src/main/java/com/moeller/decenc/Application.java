@@ -1,19 +1,19 @@
 package com.moeller.decenc;
 
 import com.moeller.decenc.infrastructure.ArtListener;
-import com.moeller.decenc.infrastructure.ArtSender;
+import com.moeller.decenc.infrastructure.ArtListenerConfigurer;
 import java.util.Arrays;
 import javax.jms.ConnectionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
-import org.springframework.jms.listener.DefaultMessageListenerContainer;
-import org.springframework.jms.support.destination.DynamicDestinationResolver;
 
 @SpringBootApplication
 @EnableJms
@@ -57,6 +57,7 @@ public class Application {
     }
 
   @Bean
+  @Primary
   public DefaultJmsListenerContainerFactory queueListenerContainerFactory(ConnectionFactory connectionFactory){
     DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
     // Here to configure the factory:
@@ -64,6 +65,16 @@ public class Application {
     factory.setPubSubDomain(false);
     return factory;
 
+  }
+
+
+  @Bean
+  @Autowired
+  @Qualifier(value = "queueListenerContainerFactory")
+  public ArtListenerConfigurer artListenerConfigurer(DefaultJmsListenerContainerFactory factory){
+
+      ArtListenerConfigurer artListenerConfigurer = new ArtListenerConfigurer(factory);
+      return artListenerConfigurer;
   }
 
 

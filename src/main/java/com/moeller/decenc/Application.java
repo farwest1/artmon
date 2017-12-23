@@ -38,62 +38,6 @@ public class Application {
         };
     }
 
-    @Bean
-    public ArtListener getArtlistener(){
-
-        return new ArtListener();
-    }
-
-
-    @Bean
-    public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(ConnectionFactory connectionFactory){
-        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-        // Here to configure the factory:
-      ((ActiveMQConnectionFactory)connectionFactory).setReconnectAttempts(-1);
-        factory.setConnectionFactory(connectionFactory);
-        factory.setPubSubDomain(true);
-        factory.setSubscriptionDurable(true);
-        factory.setSubscriptionShared(true);
-        factory.setClientId("fartmon");
-        return factory;
-
-    }
-
-
-  public DefaultJmsListenerContainerFactory queueListenerContainerFactory(ConnectionFactory connectionFactory){
-    DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-    // Here to configure the factory:
-    factory.setConnectionFactory(connectionFactory);
-    factory.setPubSubDomain(false);
-    return factory;
-
-  }
-
-  @Bean
-  public ArtSender artSender(ConnectionFactory connectionFactory){
-      ArtSender artSender = new ArtSender();
-      JmsTemplate jmsTemplate = new JmsTemplate();
-      ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory("tcp://192.168.2.108:61616", "bernd","4711");
-      cf.setClientID("artmonProd");
-      cf.setReconnectAttempts(-1);
-      jmsTemplate.setConnectionFactory(cf);
-      jmsTemplate.setPubSubDomain(true);
-      jmsTemplate.setExplicitQosEnabled(true);  // used to set TTL explicitly
-      jmsTemplate.setTimeToLive(10000L);
-
-
-      artSender.setJmsTemplate(jmsTemplate);
-      return artSender;
-
-  }
-
-
-
-  public ArtListenerConfigurer artListenerConfigurer(DefaultJmsListenerContainerFactory factory){
-
-      ArtListenerConfigurer artListenerConfigurer = new ArtListenerConfigurer(factory);
-      return artListenerConfigurer;
-  }
 
 
 

@@ -22,9 +22,6 @@ public class ArtListener {
   private static final Logger LOGGER = LoggerFactory.getLogger(ArtListener.class);
 
   @Autowired
-  private ApplicationContext context;
-
-  @Autowired
   private JmsListenerEndpointRegistry registry;
 
 

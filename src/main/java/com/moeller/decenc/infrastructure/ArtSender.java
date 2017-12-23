@@ -9,18 +9,20 @@ import org.springframework.stereotype.Component;
  *
  * Package com.moeller.decenc.infrastructure
  */
-@Component
+
 public class ArtSender {
 
-  private final JmsTemplate jmsTemplate;
+  private JmsTemplate jmsTemplate;
+  private Integer cnt = 0;
 
-  @Autowired
-  public ArtSender(JmsTemplate jmsTemplate){
+
+  public void setJmsTemplate(JmsTemplate jmsTemplate){
     this.jmsTemplate = jmsTemplate;
   }
 
   public void sendMessage(String content){
-    jmsTemplate.convertAndSend("encoQueue", "test");
+    this.jmsTemplate.convertAndSend("encoQueue" , content +cnt.toString());
+    cnt++;
   }
 
 }

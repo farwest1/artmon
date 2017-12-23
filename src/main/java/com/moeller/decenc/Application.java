@@ -2,18 +2,18 @@ package com.moeller.decenc;
 
 import com.moeller.decenc.infrastructure.ArtListener;
 import com.moeller.decenc.infrastructure.ArtListenerConfigurer;
+import com.moeller.decenc.infrastructure.ArtSender;
 import java.util.Arrays;
 import javax.jms.ConnectionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
+import org.springframework.jms.core.JmsTemplate;
 
 @SpringBootApplication
 @EnableJms
@@ -38,7 +38,6 @@ public class Application {
         };
     }
 
-
     @Bean
     public ArtListener getArtlistener(){
 
@@ -50,14 +49,17 @@ public class Application {
     public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(ConnectionFactory connectionFactory){
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         // Here to configure the factory:
+      ((ActiveMQConnectionFactory)connectionFactory).setReconnectAttempts(-1);
         factory.setConnectionFactory(connectionFactory);
         factory.setPubSubDomain(true);
+        factory.setSubscriptionDurable(true);
+        factory.setSubscriptionShared(true);
+        factory.setClientId("fartmon");
         return factory;
 
     }
 
-  @Bean
-  @Primary
+
   public DefaultJmsListenerContainerFactory queueListenerContainerFactory(ConnectionFactory connectionFactory){
     DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
     // Here to configure the factory:
@@ -67,10 +69,26 @@ public class Application {
 
   }
 
-
   @Bean
-  @Autowired
-  @Qualifier(value = "queueListenerContainerFactory")
+  public ArtSender artSender(ConnectionFactory connectionFactory){
+      ArtSender artSender = new ArtSender();
+      JmsTemplate jmsTemplate = new JmsTemplate();
+      ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory("tcp://192.168.2.108:61616", "bernd","4711");
+      cf.setClientID("artmonProd");
+      cf.setReconnectAttempts(-1);
+      jmsTemplate.setConnectionFactory(cf);
+      jmsTemplate.setPubSubDomain(true);
+      jmsTemplate.setExplicitQosEnabled(true);  // used to set TTL explicitly
+      jmsTemplate.setTimeToLive(10000L);
+
+
+      artSender.setJmsTemplate(jmsTemplate);
+      return artSender;
+
+  }
+
+
+
   public ArtListenerConfigurer artListenerConfigurer(DefaultJmsListenerContainerFactory factory){
 
       ArtListenerConfigurer artListenerConfigurer = new ArtListenerConfigurer(factory);

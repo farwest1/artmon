@@ -28,13 +28,13 @@ public class ArtListener {
   private JmsListenerEndpointRegistry registry;
 
 
-  @JmsListener(destination = "encoQueue", id = "artmon", containerFactory = "queueListenerContainerFactory")
+  @JmsListener(destination = "encoQueue", containerFactory = "jmsListenerContainerFactory")
   public void processMessage(String content){
-    LOGGER.info("Message received: " + content );
+    LOGGER.info("Message received from encoQueue: " + content );
   }
 
-  @JmsListener(destination = "encoQueue2", id="artmon2")
-  public void processOtherMessage(String content){LOGGER.info("Message received: " + content );}
+  //@JmsListener(destination = "encoQueue2", id="artmon2", containerFactory = "jmsListenerContainerFactory")
+  //public void processOtherMessage(String content){LOGGER.info("Message received from encoQueue2: " + content );}
 
   public void listContainer() {
     Collection<MessageListenerContainer> col = registry.getListenerContainers();

@@ -7,7 +7,7 @@ server:
 spring:
   artemis:
     mode: native
-    host: 192.168.2.113
-    port: 61616
-    user: admin
-    password: secret
+    host: 192.168.2.108
+    port: 61716
+    user: bernd
+    password: 4711

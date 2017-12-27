@@ -2,6 +2,7 @@ package com.moeller.decenc.infrastructure;
 
 import javax.jms.ConnectionFactory;
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -15,6 +16,9 @@ import org.springframework.jms.core.JmsTemplate;
  */
 @Configuration
 public class InfrastructureConfiguration {
+
+  @Value("${infra.destination}")
+  public String destinationName;
 
 
   @Bean
@@ -34,7 +38,7 @@ public class InfrastructureConfiguration {
     factory.setPubSubDomain(true);
     factory.setSubscriptionDurable(true);
     factory.setSubscriptionShared(true);
-    factory.setClientId("fartmon");
+    factory.setClientId(destinationName + "client");
     return factory;
 
   }

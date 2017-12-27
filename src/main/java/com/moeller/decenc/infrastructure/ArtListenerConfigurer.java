@@ -1,18 +1,12 @@
 package com.moeller.decenc.infrastructure;
 
 import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.annotation.JmsListenerConfigurer;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
-import org.springframework.jms.config.JmsListenerEndpoint;
 import org.springframework.jms.config.JmsListenerEndpointRegistrar;
 import org.springframework.jms.config.SimpleJmsListenerEndpoint;
-import org.springframework.jms.listener.MessageListenerContainer;
-import org.springframework.jms.support.converter.MessageConverter;
-import org.springframework.jms.support.destination.DestinationResolver;
 
 /**
  * Created by Bernd on 10.12.2017.

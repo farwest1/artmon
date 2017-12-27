@@ -1,6 +1,7 @@
 package com.moeller.decenc.infrastructure;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 
@@ -15,13 +16,16 @@ public class ArtSender {
   private JmsTemplate jmsTemplate;
   private Integer cnt = 0;
 
+  @Value("${infra.destination}")
+  private String destinationName;
+
 
   public void setJmsTemplate(JmsTemplate jmsTemplate){
     this.jmsTemplate = jmsTemplate;
   }
 
   public void sendMessage(String content){
-    this.jmsTemplate.convertAndSend("encoQueue" , content +cnt.toString());
+    this.jmsTemplate.convertAndSend(destinationName , content +cnt.toString());
     cnt++;
   }
 

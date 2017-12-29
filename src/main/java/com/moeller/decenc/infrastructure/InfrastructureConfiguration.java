@@ -2,9 +2,11 @@ package com.moeller.decenc.infrastructure;
 
 import javax.jms.ConnectionFactory;
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
@@ -30,25 +32,31 @@ public class InfrastructureConfiguration {
 
 
   @Bean
+  @Primary
   public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(ConnectionFactory connectionFactory){
     DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
     // Here to configure the factory:
     ((ActiveMQConnectionFactory)connectionFactory).setReconnectAttempts(-1);
     factory.setConnectionFactory(connectionFactory);
-    factory.setPubSubDomain(true);
-    factory.setSubscriptionDurable(true);
-    factory.setSubscriptionShared(true);
-    factory.setClientId(destinationName + "client");
+    factory.setPubSubDomain(false);
+    factory.setSubscriptionDurable(false);
+    factory.setSubscriptionShared(false);
+    //factory.setClientId(destinationName + "client");
+    factory.setConcurrency("20");
     return factory;
 
   }
 
-
-  public DefaultJmsListenerContainerFactory queueListenerContainerFactory(ConnectionFactory connectionFactory){
+  @Bean
+  public DefaultJmsListenerContainerFactory dynListenerContainerFactory(ConnectionFactory connectionFactory){
     DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
     // Here to configure the factory:
+    ((ActiveMQConnectionFactory)connectionFactory).setReconnectAttempts(-1);
     factory.setConnectionFactory(connectionFactory);
-    factory.setPubSubDomain(false);
+    factory.setPubSubDomain(true);
+    factory.setSubscriptionDurable(false);
+    factory.setSubscriptionShared(false);
+    //factory.setClientId(destinationName + "client");
     return factory;
 
   }
@@ -73,7 +81,8 @@ public class InfrastructureConfiguration {
   }
 
 
-
+  //@Bean
+  //@Qualifier("dynListenerContainerFactory")
   public ArtListenerConfigurer artListenerConfigurer(DefaultJmsListenerContainerFactory factory){
 
     ArtListenerConfigurer artListenerConfigurer = new ArtListenerConfigurer(factory);

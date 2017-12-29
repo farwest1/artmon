@@ -10,7 +10,7 @@ infra:
 
 spring:
   profiles:
-    active: send,recv
+    active: recv
   artemis:
     mode: native
     host: 192.168.2.108

@@ -25,7 +25,7 @@ public class ArtListener {
   private JmsListenerEndpointRegistry registry;
 
 
-  @JmsListener(destination = "${infra.destination}", containerFactory = "jmsListenerContainerFactory")
+  //@JmsListener(destination = "${infra.destination}", containerFactory = "jmsListenerContainerFactory")
   public void processMessage(String content){
     LOGGER.info("Message received from encoQueue: " + content );
   }

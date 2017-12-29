@@ -13,21 +13,29 @@ import org.springframework.jms.config.SimpleJmsListenerEndpoint;
  *
  * Package com.moeller.decenc.infrastructure
  */
-public class ArtListenerConfigurer implements JmsListenerConfigurer{
+public class ArtListenerConfigurer  {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ArtListenerConfigurer.class);
   private DefaultJmsListenerContainerFactory factory;
+  private JmsListenerEndpointRegistrar registrar;
 
   public ArtListenerConfigurer(DefaultJmsListenerContainerFactory factory){
     this.factory = factory;
   }
 
-  @Override
-  public void configureJmsListeners(JmsListenerEndpointRegistrar jmsListenerEndpointRegistrar){
+
+  //@Override
+  public void configureJmsListeners(JmsListenerEndpointRegistrar registrar){
+    this.registrar = registrar;
+    this.registrar.setContainerFactory(factory);
+
+  }
+
+  public void addEndpoint(String destination){
     SimpleJmsListenerEndpoint endpoint = new SimpleJmsListenerEndpoint();
     //configure endppoint
-    endpoint.setId("selfConfigured");
-    endpoint.setDestination("selfQueue2");
+    endpoint.setId(destination + "_artmon");
+    endpoint.setDestination(destination);
 
     endpoint.setMessageListener(m -> {
       try {
@@ -37,8 +45,8 @@ public class ArtListenerConfigurer implements JmsListenerConfigurer{
         e.printStackTrace();
       }
     });
-    //endpoint.setupListenerContainer(factory.createListenerContainer(endpoint));
-    jmsListenerEndpointRegistrar.setContainerFactory(factory);
-    jmsListenerEndpointRegistrar.registerEndpoint(endpoint);
+
+    //registrar.setContainerFactory(factory);
+    registrar.registerEndpoint(endpoint);
   }
 }

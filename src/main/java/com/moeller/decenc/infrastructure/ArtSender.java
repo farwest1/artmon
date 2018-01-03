@@ -19,12 +19,16 @@ public class ArtSender {
   @Autowired
   private InfraProperties infraProps;
 
-   public void setJmsTemplate(JmsTemplate jmsTemplate){
+  public void setJmsTemplate(JmsTemplate jmsTemplate){
     this.jmsTemplate = jmsTemplate;
   }
 
-  public void sendMessage(String content){
-    this.jmsTemplate.convertAndSend(infraProps.getDestination() , content + cnt.toString());
+  public void sendMessage(Object content){
+    sendMessage(infraProps.getDestination() , content);
+  }
+
+  public void sendMessage(String destination, Object content){
+    this.jmsTemplate.convertAndSend(destination , content);
     cnt++;
   }
 

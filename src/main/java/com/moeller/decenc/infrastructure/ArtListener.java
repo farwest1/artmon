@@ -1,5 +1,6 @@
 package com.moeller.decenc.infrastructure;
 
+import com.moeller.decenc.domain.Person;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
@@ -26,8 +27,10 @@ public class ArtListener {
 
 
   @JmsListener(destination = "${infra.destination}", containerFactory = "jmsListenerContainerFactory")
-  public void processMessage(String content){
-    LOGGER.info("Message received from encoQueue: " + content );
+  public void processMessage(Person content){
+
+
+    LOGGER.info("Message received from encoQueue: " + content.toString() );
   }
 
   //@JmsListener(destination = "encoQueue2", id="artmon2", containerFactory = "jmsListenerContainerFactory")

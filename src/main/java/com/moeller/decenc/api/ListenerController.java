@@ -5,6 +5,7 @@ import com.moeller.decenc.infrastructure.ArtListenerConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -44,8 +45,8 @@ public class ListenerController {
   }
 
   @RequestMapping("/add")
-  public void addListener(){
-    artListenerConfigurer.addEndpoint("newDest" + topicCnt++);
+  public void addListener(@RequestParam(value = "dest", required = false, defaultValue = "newDest") String destination){
+    artListenerConfigurer.addEndpoint(destination);
   }
 
 

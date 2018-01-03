@@ -1,13 +1,14 @@
 package com.moeller.decenc.domain;
 
 
+import java.io.Serializable;
 
 /**
  * Created by Bernd on 10.10.2017.
  *
  * Package com.moeller.decenc.domain
  */
-public class Person {
+public class Person implements Serializable{
 
   public enum Sex {
     MALE, FEMALE
@@ -17,6 +18,10 @@ public class Person {
   private final String firstName;
   private final String lastName;
   private Sex gender;
+
+  public Person(){
+    this(1,"Bernd", "Moeller", Sex.MALE);
+  }
 
   public Person(long id, String firstName, String lastName, Sex gender) {
     this.id = id;
@@ -43,5 +48,9 @@ public class Person {
 
   public void setGender(Sex gender){
     this.gender = gender;
+  }
+
+  public String toString(){
+    return firstName + "/" + lastName;
   }
 }

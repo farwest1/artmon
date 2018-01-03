@@ -4,16 +4,19 @@ server:
 
 infra:
   destination: encoTopic
+  connection-uri: (tcp://192.168.2.11:61616,tcp://192.168.2.11:61716)?reconnectAttempts=5
+  user: bernd
+  password: 4711
 
 
 
 
 spring:
   profiles:
-    active: recv
+    active: send,recv
   artemis:
     mode: native
-    host: 192.168.2.108
-    port: 61716
+    host: 192.168.2.11
+    port: 61616
     user: bernd
     password: 4711

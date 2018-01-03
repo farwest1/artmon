@@ -13,7 +13,7 @@ import org.springframework.jms.config.SimpleJmsListenerEndpoint;
  *
  * Package com.moeller.decenc.infrastructure
  */
-public class ArtListenerConfigurer  {
+public class ArtListenerConfigurer implements JmsListenerConfigurer  {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ArtListenerConfigurer.class);
   private DefaultJmsListenerContainerFactory factory;
@@ -24,7 +24,7 @@ public class ArtListenerConfigurer  {
   }
 
 
-  //@Override
+  @Override
   public void configureJmsListeners(JmsListenerEndpointRegistrar registrar){
     this.registrar = registrar;
     this.registrar.setContainerFactory(factory);

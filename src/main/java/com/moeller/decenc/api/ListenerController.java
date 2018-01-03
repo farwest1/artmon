@@ -20,6 +20,7 @@ public class ListenerController {
   private final ArtListener artListener;
   private static int topicCnt = 0;
 
+  @Autowired
   private ArtListenerConfigurer artListenerConfigurer;
 
   @Autowired

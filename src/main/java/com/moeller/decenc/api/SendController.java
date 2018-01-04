@@ -37,7 +37,7 @@ public class SendController {
   }
 
   @RequestMapping(value = "/send", method = RequestMethod.POST, consumes = "application/json")
-  public void send(@RequestBody Person person, @RequestParam(value = "dest", required = false, defaultValue = "") String destination){
+  public void send(@RequestBody Object person, @RequestParam(value = "dest", required = false, defaultValue = "") String destination){
     sendToDest(destination, person);
 
   }

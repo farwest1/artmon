@@ -1,6 +1,8 @@
 package com.moeller.decenc.domain;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.Serializable;
 
 /**
@@ -50,7 +52,14 @@ public class Person implements Serializable{
     this.gender = gender;
   }
 
+  @Override
   public String toString(){
-    return firstName + "/" + lastName;
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+      return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
+    }
+    catch (JsonProcessingException e){
+      return "Json could not be generated";
+    }
   }
 }

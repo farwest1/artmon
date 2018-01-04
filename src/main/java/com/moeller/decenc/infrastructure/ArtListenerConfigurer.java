@@ -1,5 +1,6 @@
 package com.moeller.decenc.infrastructure;
 
+import com.moeller.decenc.domain.Person;
 import javax.jms.JMSException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,21 +33,22 @@ public class ArtListenerConfigurer implements JmsListenerConfigurer  {
   }
 
   public void addEndpoint(String destination){
+    //TODO: Check if endpoint is already registered
     SimpleJmsListenerEndpoint endpoint = new SimpleJmsListenerEndpoint();
-    //configure endppoint
+
+    //configure endpoint
     endpoint.setId(destination + "_artmon");
     endpoint.setDestination(destination);
 
     endpoint.setMessageListener(m -> {
       try {
-        LOGGER.info(m.getBody(String.class));
+        LOGGER.info(m.getBody(Object.class).toString());
       }
       catch (JMSException e){
         e.printStackTrace();
       }
     });
 
-    //registrar.setContainerFactory(factory);
     registrar.registerEndpoint(endpoint);
   }
 }
